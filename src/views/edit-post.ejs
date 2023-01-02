@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head') %>
+  <link rel="stylesheet" href="/form.css">
+</head>
+<body>
+  <%- include('./partials/nav') %>
+
+    <section class="main">
+      
+      <h2 style="text-align: center;">Edit post form</h2>
+
+        <form action="/edit-post/<%= post._id %>?_method=PUT" method="post" id="contact-form">
+            <div class="form-info">
+              <label>Post Title
+                <input type="text" name="title" value="<%= post.title %>">
+              </label>
+            </div>
+            <div class="form-text">
+              <label>Post Text
+                <textarea name="text"><%= post.text %></textarea>
+              </label>
+            </div>
+            <div class="form-button">
+              <input type="submit" value="Edit">
+            </div>
+          </form>
+
+    </section>
+</body>
+</html>

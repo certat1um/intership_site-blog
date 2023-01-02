@@ -1,0 +1,46 @@
+form {
+  padding: 5px 10px;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+}
+
+form div {
+  margin-bottom: 10px;
+  display: flex;
+}
+
+form div label {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.form-info {
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+input,
+textarea {
+  min-height: 20px;
+  border: 1px solid #cecece;
+  padding: 3px 5px;
+  outline: none;
+}
+
+textarea {
+  resize: none;
+  min-height: 150px;
+}
+
+.form-button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.form-button input {
+  padding: 5px 10px;
+  cursor: pointer;
+}

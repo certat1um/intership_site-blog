@@ -1,0 +1,22 @@
+.profile-info {
+  text-align: center;
+  padding-bottom: 20px;
+  margin-bottom: 40px;
+  border-bottom: 1px solid #cecece;
+}
+
+.profile-name {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.profile-login {
+  font-style: italic;
+  font-size: .8rem;
+}
+
+.blog {
+  max-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+}

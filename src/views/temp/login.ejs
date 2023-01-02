@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head') %>
+  <link rel="stylesheet" href="/form.css">
+</head>
+<body>
+  <%- include('./partials/nav') %>
+
+  <section class="main">
+    <h1 style="text-align: center;">Login form</h1>
+    
+    <form id="contact-form">
+      <div class="form-info">
+        <label>
+        Login:
+        <input type="text" name="login">
+        </label>
+        <label>
+        Password:
+        <input type="password" name="password">
+        </label>
+      </div>
+      <div class="form-replace-to-login">
+        <span>Or <a href="/registration">register</a> if you don't have one.</span> 
+      </div>
+      <div class="form-button">
+        <input type="submit" value="Login">
+      </div>
+      </form>
+
+  </section>
+
+</body>
+</html>

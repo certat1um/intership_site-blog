@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head') %>
+  <link rel="stylesheet" href="/post.css">
+</head>
+<body>
+  <%- include('./partials/nav') %>
+
+  <section class="main">
+
+    <div class="post">
+      <h2 class="post-heading">
+        <%= post.title %>
+      </h2>
+      <div class="post-author">
+        <a href="/profile/<%= post.author.login %>">
+          <%= post.author.fullname %>
+        </a>
+      </div>
+      <div class="post-content">
+        <%= post.text %>
+      </div>
+      <div class="post-date"><%= post.date %></div>
+    </div>
+
+  </section>
+</body>
+</html>
