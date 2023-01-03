@@ -11,17 +11,17 @@
 
     <div class="post">
       <h2 class="post-heading">
-        <%= post.title %>
+        <%= data.post_title %>
       </h2>
       <div class="post-author">
-        <a href="/profile/<%= post.author.login %>">
-          <%= post.author.fullname %>
+        <a href="/profile/<%= data.author_login %>">
+          <%= data.author_fullname %>
         </a>
       </div>
       <div class="post-content">
-        <%= post.text %>
+        <%= data.post_text %>
       </div>
-      <div class="post-date"><%= post.date %></div>
+      <div class="post-date"><%= data.post_updatedAt.toLocaleDateString() %></div>
     </div>
 
   </section>

@@ -8,17 +8,17 @@
   <%- include('./partials/nav') %>
 
   <section class="main">
-    <h1 style="post_text-align: center;">Look at the posts here and explore.</h1>
+    <h1 style="text-align: center;">Look at the posts here and explore.</h1>
     
     <div class="posts">
       <% if (data.length) { %>
-        <% data.forEach(({ post_ID, post_title, post_text, author_login, post_updatedAt }) => { %>
+        <% data.forEach(({ post_ID, post_title, post_text, author_login, author_fullname, post_updatedAt }) => { %>
           <div class="post">
             <h2 class="post-heading">
               <a href="/post/<%= post_ID %>"><%= post_title %></a>
             </h2>
             <div class="post-author">
-              <a href="/profile/<%= author_login %>"><%= author_login %></a>
+              <a href="/profile/<%= author_login %>"><%= author_fullname %></a>
             </div>
             <div class="post-content">
               <%= post_text %>
@@ -27,7 +27,7 @@
             <div class="post-control-actions">
               <a href="/edit-post/<%= post_ID %>">Edit Post</a>
               |
-              <button data-id="<%= post_ID %>">Delete Post</button>
+              <button data-post_id="<%= post_ID %>">Delete Post</button>
             </div>
           </div>
         <% }) %>
@@ -37,13 +37,13 @@
   </section>
 
   <script>
-    //document.addEventListener('click', (e) => {
-    //  const id = e.target?.dataset?.id || null;
-    //  if (id) {
-    //    fetch(`/delete-post/${id}`, {method: 'DELETE'})
-    //      .then(() => window.location.reload());
-    //  }
-    //});
+    document.addEventListener('click', (e) => {
+      const id = e.target.dataset.post_id || null;
+      if (id) {
+        fetch(`/delete-post/${id}`, {method: 'DELETE'})
+          .then(() => window.location.reload());
+      }
+    });
   </script>
 </body>
 </html>

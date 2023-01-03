@@ -1,4 +1,5 @@
 import express from 'express';
+const methodOverride = require('method-override');
 
 const path = require('path');
 const singleRoutes = require('./routes/single-routes');
@@ -15,8 +16,9 @@ app.listen(PORT, 'localhost', () => {
 
 app.set('view engine', 'ejs');
 // @ts-ignore
-app.use(express.urlencoded({extended: 'false'}));
+app.use(express.urlencoded({ extended: 'false' }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(methodOverride('_method'));
 
 app.use(singleRoutes);
 app.use(postRoutes);

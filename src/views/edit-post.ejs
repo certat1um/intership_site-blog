@@ -11,15 +11,15 @@
       
       <h2 style="text-align: center;">Edit post form</h2>
 
-        <form action="/edit-post/<%= post._id %>?_method=PUT" method="post" id="contact-form">
+        <form action="/edit-post/<%= post.post_ID %>?_method=PUT" method="post" id="contact-form">
             <div class="form-info">
               <label>Post Title
-                <input type="text" name="title" value="<%= post.title %>">
+                <input type="text" name="post_title" value="<%= post.post_title %>">
               </label>
             </div>
             <div class="form-text">
               <label>Post Text
-                <textarea name="text"><%= post.text %></textarea>
+                <textarea name="post_text"><%= post.post_text %></textarea>
               </label>
             </div>
             <div class="form-button">
