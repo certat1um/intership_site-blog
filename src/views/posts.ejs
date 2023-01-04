@@ -11,8 +11,8 @@
     <h1 style="text-align: center;">Look at the posts here and explore.</h1>
     
     <div class="posts">
-      <% if (data.length) { %>
-        <% data.forEach(({ post_ID, post_title, post_text, author_login, author_fullname, post_updatedAt }) => { %>
+      <% if (posts.length) { %>
+        <% posts.forEach(({ post_ID, post_title, post_text, author_login, author_fullname, post_updatedAt }) => { %>
           <div class="post">
             <h2 class="post-heading">
               <a href="/post/<%= post_ID %>"><%= post_title %></a>

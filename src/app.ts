@@ -5,6 +5,7 @@ const path = require('path');
 const singleRoutes = require('./routes/single-routes');
 const errorRoutes = require('./routes/error-routes');
 const postRoutes = require('./routes/post-routes');
+const postAPIRoutes = require('./routes/api-post-routes');
 
 const app = express();
 
@@ -22,4 +23,5 @@ app.use(methodOverride('_method'));
 
 app.use(singleRoutes);
 app.use(postRoutes);
+app.use(postAPIRoutes);
 app.use(errorRoutes);

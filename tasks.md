@@ -18,5 +18,6 @@
   - [x] Realise CRUD operations in 'post-controller'
  [x] Create 'Post' class of Database with CRUD operation functions
  [x] Make test requests
- [ ] Realise Handling Error functions
+ [x] Realise Handling Error functions
+ [ ] Create Basic API
  [ ] Refactor project for better working with Typescript

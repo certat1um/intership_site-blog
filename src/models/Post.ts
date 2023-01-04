@@ -1,5 +1,4 @@
-import { Request, Response } from 'express';
-const { makeQuery } = require('../database');
+const makeQuery = require('../database');
 
 class Post {
   static async findAll() {
@@ -25,8 +24,16 @@ class Post {
     return await makeQuery(query).then((res: any) => res[0]);
   }
 
-  static async create(post_ID: string, post_title: string, post_text: string, author_login: string, post_createdAt: Date, post_updatedAt: Date) {
-    
+  static async create(post: [string, Date]) {
+    const {
+      post_ID,
+      post_title,
+      post_text,
+      author_login,
+      post_createdAt,
+      post_updatedAt,
+    }: any = post;
+
     const query = `
       INSERT INTO posts
       (post_ID, post_title, post_text,

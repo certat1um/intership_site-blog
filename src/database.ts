@@ -4,8 +4,6 @@ const conn = mysql.createConnection({
   database: 'intership_site_blog',
   host: 'localhost',
   user: 'root',
-  //password: '',
-  //insecureAuth: true,
 });
 
 conn.connect((err: string) => {
@@ -22,7 +20,5 @@ const makeQuery = (query: string) => {
   }); 
 };
 
-module.exports = {
-  conn,
-  makeQuery,
-};
+module.exports = makeQuery;
+export {}
