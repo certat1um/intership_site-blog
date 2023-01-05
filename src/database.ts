@@ -11,7 +11,7 @@ conn.connect((err: string) => {
   else console.log('Database ===> OK');
 });
 
-const makeQuery = (query: string) => {
+export const makeQuery = (query: string) => {
   return new Promise((resolve, reject) => {
     conn.query(query, (err: any, data: any) => {
       if(err) reject(err);
@@ -19,6 +19,3 @@ const makeQuery = (query: string) => {
     });
   }); 
 };
-
-module.exports = makeQuery;
-export {}

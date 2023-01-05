@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-const uniqid = require('uniqid');
-const Post = require('../models/Post');
-const createPath = require('../helpers/createPath');
-const createValidDate = require('../helpers/createValidDate');
-const handleError = require('../helpers/handleError');
+import { createPath } from '../helpers/createPath';
+import { createValidDate } from '../helpers/createValidDate';
+import { handleError } from '../helpers/handleError';
+import { IPost } from '../interfaces/IPost';
+import { Post } from '../models/Post';
 
 // Get Pages
 const getAddPost = (req: Request, res: Response) => {
@@ -43,8 +43,6 @@ const getPost = (req: Request, res: Response) => {
   Post
     .findById(req.params.id)
     .then((post: any) => {
-      console.log(post);
-      
       res
         .status(200)
         .render(createPath('post'), { title, post });
@@ -54,18 +52,13 @@ const getPost = (req: Request, res: Response) => {
 
 // Other Post Actions
 const createPost = (req: Request, res: Response) => {
-  const post: any = {
-    post_ID: uniqid(),
-    author_login: 'johnsmith01',
-    post_createdAt: createValidDate(new Date()),
-    post_updatedAt: createValidDate(new Date()),
-  };
+  const {
+    post_title,
+    post_text,
+  }: IPost = req.body;
 
-  post.post_title = req.body.post_title;
-  post.post_text = req.body.post_text;
-  
   Post
-    .create(post)
+    .create(new Post({ post_title, post_text }))
     .then(() => res.redirect('/posts'))
     .catch((err: Error) => handleError(res, err));
 };
@@ -85,7 +78,7 @@ const updatePost = (req: Request, res: Response) => {
     .catch((err: Error) => handleError(res, err));
 };
 
-module.exports = {
+export {
   getPosts,
   getPost,
   createPost,

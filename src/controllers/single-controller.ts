@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-
-const createPath = require('../helpers/createPath');
+import { createPath } from '../helpers/createPath';
 
 const getHomepage = (req: Request, res: Response) => {
   const title = 'Home';
@@ -14,7 +13,7 @@ const getContactsPage = (req: Request, res: Response) => {
   res.render(createPath('contacts'), { title });
 };
 
-module.exports = {
+export {
   getHomepage,
   getContactsPage,
 };

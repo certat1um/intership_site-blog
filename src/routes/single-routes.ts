@@ -1,13 +1,13 @@
-import express from 'express';
+import { Router } from 'express';
 
-const router = express.Router();
-const {
+import {
   getHomepage,
   getContactsPage,
-} = require('../controllers/single-controller');
+} from '../controllers/single-controller';
+
+const router = Router();
 
 router.get('/', getHomepage);
-
 router.get('/contacts', getContactsPage);
 
-module.exports = router;
+export { router };

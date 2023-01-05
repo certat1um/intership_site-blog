@@ -1,15 +1,10 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
+import { createPath } from '../helpers/createPath';
 
-const createPath = require('../helpers/createPath');
-
-const getErrorPage = ((req: Request, res: Response) => {
+export const getErrorPage = ((req: Request, res: Response) => {
   const title = 'Error page';
 
   res
     .status(404)
     .render(createPath('error'), { title });
 });
-
-module.exports = {
-  getErrorPage,
-};

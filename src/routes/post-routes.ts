@@ -1,7 +1,6 @@
 import { Router } from 'express';
 
-const router = Router();
-const {
+import {
   getPosts,
   getPost,
   createPost,
@@ -9,7 +8,9 @@ const {
   deletePost,
   getAddPost,
   getEditPost,
-} = require('../controllers/post-controller');
+} from '../controllers/post-controller';
+
+export const router = Router();
 
 router.get('/posts', getPosts);
 router.get('/post/:id', getPost);
@@ -18,5 +19,3 @@ router.get('/edit-post/:id', getEditPost);
 router.post('/new-post', createPost);
 router.delete('/delete-post/:id', deletePost);
 router.put('/edit-post/:id', updatePost);
-
-module.exports = router;

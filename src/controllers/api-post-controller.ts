@@ -1,20 +1,17 @@
 import { Request, Response } from "express";
-const uniqid = require('uniqid');
-const Post = require('../models/Post');
-const createValidDate = require('../helpers/createValidDate');
-const handleAPIError = require('../helpers/handleAPIError');
+import uniqid from 'uniqid';
+import { Post } from '../models/Post';
+import { createValidDate } from '../helpers/createValidDate';
+import { handleAPIError } from '../helpers/handleAPIError';
 
 const getPosts = (req: Request, res: Response) => {
-  const title = 'Posts';
-
-  Post.findAll()
-    .then((posts: JSON) => res.status(200).json(posts))
+  Post
+    .findAll()
+    .then((posts: any) => res.status(200).json(posts))
     .catch((err: Error) => handleAPIError(res, err));
 };
 
 const getPost = (req: Request, res: Response) => {
-  const title = 'Post';
-
   Post
     .findById(req.params.id)
     .then((post: JSON) => res.status(200).json(post))
@@ -34,14 +31,14 @@ const createPost = (req: Request, res: Response) => {
   
   Post
     .create(post)
-    .then((post: JSON) => res.status(200).json(post))
+    .then((post: any) => res.status(200).json(post))
     .catch((err: Error) => handleAPIError(res, err));
 };
 
 const deletePost = (req: Request, res: Response) => {
   Post
     .deleteById(req.params.id)
-    .then((post: JSON) => res.status(200).json(post))
+    .then((post: any) => res.status(200).json(post))
     .catch((err: Error) => handleAPIError(res, err));
 };
 
@@ -51,11 +48,11 @@ const updatePost = (req: Request, res: Response) => {
   
   Post
     .updateById(req.body)
-    .then((post: JSON) => res.status(200).json(post))
+    .then((post: any) => res.status(200).json(post))
     .catch((err: Error) => handleAPIError(res, err));
 };
 
-module.exports = {
+export {
   getPosts,
   getPost,
   createPost,

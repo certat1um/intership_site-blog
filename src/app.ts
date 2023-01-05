@@ -1,11 +1,10 @@
+import path from 'path';
 import express from 'express';
-const methodOverride = require('method-override');
-
-const path = require('path');
-const singleRoutes = require('./routes/single-routes');
-const errorRoutes = require('./routes/error-routes');
-const postRoutes = require('./routes/post-routes');
-const postAPIRoutes = require('./routes/api-post-routes');
+import methodOverride from 'method-override';
+import { router as errorRoutes } from './routes/error-routes';
+import { router as postAPIRoutes } from './routes/api-post-routes';
+import { router as singleRoutes } from './routes/single-routes';
+import { router as postRoutes } from './routes/post-routes';
 
 const app = express();
 
@@ -16,12 +15,11 @@ app.listen(PORT, 'localhost', () => {
 });
 
 app.set('view engine', 'ejs');
-// @ts-ignore
-app.use(express.urlencoded({ extended: 'false' }));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
 
+app.use(postAPIRoutes);
 app.use(singleRoutes);
 app.use(postRoutes);
-app.use(postAPIRoutes);
 app.use(errorRoutes);

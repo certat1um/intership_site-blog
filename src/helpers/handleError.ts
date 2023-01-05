@@ -1,9 +1,7 @@
 import { Response } from "express";
-const createPath = require('./createPath');
+import { createPath } from './createPath';
 
-const handleError = (res: Response, err: Error) => {
+export const handleError = (res: Response, err: Error) => {
   console.log(err);
   res.render(createPath('error'), { title: 'Error' });
 };
-
-module.exports = handleError;

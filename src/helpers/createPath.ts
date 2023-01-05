@@ -1,5 +1,3 @@
 import path from 'path';
 
-const createPath = (file: string) => path.resolve(__dirname, '../views', `${file}.ejs`);
-
-module.exports = createPath;
+export const createPath = (file: string): string => path.resolve(__dirname, '../views', `${file}.ejs`);
