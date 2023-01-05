@@ -1,6 +1,6 @@
 import { Response } from "express";
 
-export const handleAPIError = (res: Response, err: Error) => {
+export const handleAPIError = (res: Response, err: any) => {
   console.log(err);
-  res.status(500).send(err.message);
+  res.status(500).send(err);
 };

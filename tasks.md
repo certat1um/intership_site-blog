@@ -1,14 +1,3 @@
-### Project files structure
- - controllers (route controllers)
- - helpers (helpful functions)
- - models
-  - Post.ts
- - public (static files)
- - routes (connect controllers route functions with app.ts)
- - views (EJS files)
- - app.ts (init server file)
- - database.ts (database connection realisation)
-
 ### Tasks
  [x] Build project files structure
  [x] Realise server launch and modules in app.ts
@@ -20,7 +9,8 @@
  [x] Make test requests
  [x] Realise Handling Error functions
  [x] Create basic API
- - Refresh and learn:
+
+### ['in-process'] Refresh and learn: 
   [x] Basic types
   [x] Functions
   [~] Objectsmpm
@@ -29,12 +19,15 @@
   [] Namespaces & modules
   [] Interfaces
   [] Generics
- ['in-process'] Refactor project for better working with Typescript
 
-### To Refactor
- [x] Not required but imports & module.exports ==> export before function
+### ['in-process'] Refactor project
+ [x] Not required but imports & module.exports ==> export before functions
+ - Remove static methods from 'Post' class ['in-process']
+  [x] Change api-post-controller
+  [x] Realise handling API error functions
+  [] Change other controllers
+
  [] Do not use 'any'
  [] JSON to interfaces | types
- [] Remove static methods from 'Post' class
- [] mysql2
+ [x] mysql2
  [] JSlint

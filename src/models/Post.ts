@@ -1,28 +1,32 @@
-import { IPost } from '../interfaces/IPost';
-import { createValidDate } from '../helpers/createValidDate';
 import uniqid from 'uniqid';
+import { IPost } from '../interfaces/IPost';
 import { makeQuery } from '../database';
+import { createValidDate } from '../helpers/createValidDate';
 
 export class Post implements IPost {
-  public post_title: string;
-  public post_text: string;
   public post_ID: string;
-  public author_login: string;
-  public post_createdAt: string;
-  public post_updatedAt: string;
+  public post_title: string | undefined;
+  public post_text: string | undefined;
+  public author_login: string | undefined;
+  public post_createdAt: string | undefined;
+  public post_updatedAt: string | undefined;
 
-  constructor(postData: any) {
+  constructor(postData: IPost) {
     const {
+        post_ID,
         post_title,
         post_text,
-    }: any = postData;
+        author_login,
+        post_createdAt,
+        post_updatedAt,
+    } = postData;
 
-    this.post_ID = uniqid();
+    this.post_ID = post_ID;
     this.post_title = post_title;
     this.post_text = post_text;
-    this.author_login = 'johnsmith01';
-    this.post_createdAt = createValidDate(new Date());
-    this.post_updatedAt = createValidDate(new Date());
+    this.author_login = author_login;
+    this.post_createdAt = post_createdAt;
+    this.post_updatedAt = post_updatedAt;
   }
 
   static async findAll() {
@@ -35,56 +39,70 @@ export class Post implements IPost {
       ORDER BY post_updatedAt DESC;
     `;
 
-    return await makeQuery(query);
+    const posts = await makeQuery(query, []);
+
+    // @ts-ignore
+    return await posts[0];
   }
 
-  static async findById(id: string) {
+  async findById() {
     const query = `
       SELECT post_ID, post_title, post_text, authors.author_login, author_fullname, post_createdAt, post_updatedAt
       FROM posts INNER JOIN authors
-      ON posts.post_ID = '${id}';
+      ON posts.post_ID = ?;
     `;
 
-    return await makeQuery(query).then((res: any) => res[0]);
+    const post = await makeQuery(query, [this.post_ID]);
+
+    // @ts-ignore
+    return (post) ? post[0][0] : post;
   }
 
-  static async create(post: IPost) {
-    const {
-      post_ID,
-      post_title,
-      post_text,
-      author_login,
-      post_createdAt,
-      post_updatedAt,
-    }: IPost = post;
+  async create() {
+    this.post_ID = uniqid();
+    this.post_title = this.post_title;
+    this.post_text = this.post_text;
+    this.author_login = 'johnsmith01';
+    this.post_createdAt = createValidDate(new Date());
+    this.post_updatedAt = createValidDate(new Date());
 
     const query = `
       INSERT INTO posts
       (post_ID, post_title, post_text,
       author_login, post_createdAt, post_updatedAt)
       VALUES
-      ('${post_ID}', '${post_title}', '${post_text}', '${author_login}', '${post_createdAt}', '${post_updatedAt}');
+      (?, ?, ?, ?, ?, ?);
     `;
-    
-    makeQuery(query);
+
+    await makeQuery(query, Object.values(this));
+    return await this;
   }
 
-  static async updateById({ post_ID, post_title, post_text, post_updatedAt }: IPost) {
+  async updateById() {
     const query = `
       UPDATE posts
-      SET post_title = '${post_title}', post_text = '${post_text}', post_updatedAt = '${post_updatedAt}'
-      WHERE post_ID = '${post_ID}';
+      SET post_title = ?, post_text = ?, post_updatedAt = ?
+      WHERE post_ID = ?;
     `;
 
-    makeQuery(query);
+    const postData = [
+      this.post_title,
+      this.post_text,
+      this.post_updatedAt = createValidDate(new Date()),
+      this.post_ID,
+    ];
+
+    const result = await makeQuery(query, postData);
+
+    return await result;
   }
 
-  static async deleteById(id: string) {
+  async deleteById() {
     const query = `
       DELETE FROM posts
-      WHERE post_ID = '${id}';
+      WHERE post_ID = ?;
     `;
 
-    makeQuery(query);
+    return await makeQuery(query, [this.post_ID]);
   }
 }

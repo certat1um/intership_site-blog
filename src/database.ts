@@ -1,21 +1,20 @@
-const mysql = require('mysql');
+import mysql from 'mysql2';
 
 const conn = mysql.createConnection({
-  database: 'intership_site_blog',
   host: 'localhost',
   user: 'root',
+  database: 'intership_site_blog',
 });
 
-conn.connect((err: string) => {
+conn.connect((err: any): void => {
   if(err) console.log(err);
   else console.log('Database ===> OK');
 });
 
-export const makeQuery = (query: string) => {
-  return new Promise((resolve, reject) => {
-    conn.query(query, (err: any, data: any) => {
-      if(err) reject(err);
-      else resolve(data);
-    });
-  }); 
+export const makeQuery = async (query: string, data: (string | undefined)[]) => {
+  try {
+    return await conn.promise().query(query, data);
+  } catch (err) {
+      console.log(err);
+  }
 };
