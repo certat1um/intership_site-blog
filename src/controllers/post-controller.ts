@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { createValidDate } from '../helpers/createValidDate';
 import { handleError } from '../helpers/handleError';
 import { createPath } from '../helpers/createPath';
 import { IPost } from '../interfaces/IPost';
@@ -17,10 +16,10 @@ const getEditPost = async (req: Request, res: Response) => {
     const postToFind = await new Post({ post_ID: req.params.id });
     const post = await new Post(postToFind).findById();
     
-    if(post) {
-      await res.status(200).render(createPath('edit-post'), { title, post });
+    if(!post) {
+      throw new Error('No post has been found');
     }
-    else throw new Error('No post has been found');
+    res.status(200).render(createPath('edit-post'), { title, post });
   } catch(err) {
     handleError(res, err);
   }
@@ -30,13 +29,12 @@ const getEditPost = async (req: Request, res: Response) => {
 const getPosts = async (req: Request, res: Response) => {
   try {
     const title = 'Posts';
-
     const posts = await Post.findAll();
 
-    if(posts) {
-      await res.status(200).render(createPath('posts'), { title, posts });
+    if(!posts) {
+      throw new Error('No posts have been found');
     }
-    else throw new Error('No posts have been found');
+    res.status(200).render(createPath('posts'), { title, posts });
   } catch(err) {
     handleError(res, err);
   }
@@ -44,14 +42,13 @@ const getPosts = async (req: Request, res: Response) => {
 const getPost = async(req: Request, res: Response) => {
   try {
     const title = 'Post';
-
     const post_ID = { post_ID: req.params.id };
     const post = await new Post(post_ID).findById();
     
     if(!post) {
       throw new Error('Post has not been found');
     }
-    await res.status(200).render(createPath('post'), { title, post });
+    res.status(200).render(createPath('post'), { title, post });
   } catch(err) {
     handleError(res, err);
   }
@@ -61,8 +58,7 @@ const getPost = async(req: Request, res: Response) => {
 const createPost = async (req: Request, res: Response) => {
   try {
     await new Post(req.body).create();
-
-    await res.redirect('/posts');
+    res.redirect('/posts');
   } catch(err) {
     handleError(res, err);
   }
@@ -70,9 +66,9 @@ const createPost = async (req: Request, res: Response) => {
 const deletePost = async (req: Request, res: Response) => {
   try {
     const post_ID = { post_ID: req.params.id };
-    const result = await new Post(post_ID).deleteById();
-
-    await res.redirect('/posts');
+    
+    await new Post(post_ID).deleteById();
+    res.redirect('/posts');
   } catch (err) {
     handleError(res, err);
   }
@@ -84,9 +80,9 @@ const updatePost = async (req: Request, res: Response) => {
       ...post_ID,
       ...req.body,
     };
-    const result = await new Post(postData).updateById();
 
-    await res.redirect('/posts');
+    await new Post(postData).updateById();
+    res.redirect('/posts');
   } catch (err) {
     handleError(res, err);
   }

@@ -5,11 +5,11 @@ import { createValidDate } from '../helpers/createValidDate';
 
 export class Post implements IPost {
   public post_ID: string;
-  public post_title: string | undefined;
-  public post_text: string | undefined;
-  public author_login: string | undefined;
-  public post_createdAt: string | undefined;
-  public post_updatedAt: string | undefined;
+  public post_title?: string;
+  public post_text?: string;
+  public author_login?: string;
+  public post_createdAt?: string;
+  public post_updatedAt?: string;
 
   constructor(postData: IPost) {
     const {
@@ -59,12 +59,14 @@ export class Post implements IPost {
   }
 
   async create() {
-    this.post_ID = uniqid();
-    this.post_title = this.post_title;
-    this.post_text = this.post_text;
-    this.author_login = 'johnsmith01';
-    this.post_createdAt = createValidDate(new Date());
-    this.post_updatedAt = createValidDate(new Date());
+    const postData: IPost = {
+      post_ID: uniqid(),
+      post_title: this.post_title,
+      post_text: this.post_text,
+      author_login: 'johnsmith01',
+      post_createdAt: createValidDate(new Date()),
+      post_updatedAt: createValidDate(new Date()), 
+    };
 
     const query = `
       INSERT INTO posts
@@ -74,8 +76,8 @@ export class Post implements IPost {
       (?, ?, ?, ?, ?, ?);
     `;
 
-    await makeQuery(query, Object.values(this));
-    return await this;
+    await makeQuery(query, Object.values(postData));
+    return postData;
   }
 
   async updateById() {
@@ -93,8 +95,7 @@ export class Post implements IPost {
     ];
 
     const result = await makeQuery(query, postData);
-
-    return await result;
+    return result;
   }
 
   async deleteById() {
@@ -103,6 +104,6 @@ export class Post implements IPost {
       WHERE post_ID = ?;
     `;
 
-    return await makeQuery(query, [this.post_ID]);
+    return makeQuery(query, [this.post_ID]);
   }
 }
