@@ -1,7 +1,6 @@
-import { Router } from 'express';
+import { Router } from "express";
+import { getErrorPage } from "../controllers/error-controller";
 
 export const router = Router();
-
-const { getErrorPage } = require('../controllers/error-controller');
 
 router.use(getErrorPage);

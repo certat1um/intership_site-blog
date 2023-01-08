@@ -1,7 +1,7 @@
-import uniqid from 'uniqid';
-import { IPost } from '../interfaces/IPost';
-import { makeQuery } from '../database';
-import { createValidDate } from '../helpers/createValidDate';
+import uniqid from "uniqid";
+import { IPost } from "../interfaces/IPost";
+import { makeQuery } from "../database";
+import { createValidDate } from "../helpers/createValidDate";
 
 export class Post implements IPost {
   public post_ID: string;
@@ -13,12 +13,12 @@ export class Post implements IPost {
 
   constructor(postData: IPost) {
     const {
-        post_ID,
-        post_title,
-        post_text,
-        author_login,
-        post_createdAt,
-        post_updatedAt,
+      post_ID,
+      post_title,
+      post_text,
+      author_login,
+      post_createdAt,
+      post_updatedAt,
     } = postData;
 
     this.post_ID = post_ID;
@@ -41,21 +41,23 @@ export class Post implements IPost {
 
     const posts = await makeQuery(query, []);
 
-    // @ts-ignore
-    return await posts[0];
+    if (!posts) {
+      throw new Error("No posts have been found");
+    }
+    return posts;
   }
 
-  async findById() {
+  static async findById(id: string) {
     const query = `
       SELECT post_ID, post_title, post_text, authors.author_login, author_fullname, post_createdAt, post_updatedAt
       FROM posts INNER JOIN authors
       ON posts.post_ID = ?;
     `;
 
-    const post = await makeQuery(query, [this.post_ID]);
+    const post = await makeQuery(query, [id]);
 
     // @ts-ignore
-    return (post) ? post[0][0] : post;
+    return post ? post[0] : null;
   }
 
   async create() {
@@ -63,9 +65,9 @@ export class Post implements IPost {
       post_ID: uniqid(),
       post_title: this.post_title,
       post_text: this.post_text,
-      author_login: 'johnsmith01',
+      author_login: "johnsmith01",
       post_createdAt: createValidDate(new Date()),
-      post_updatedAt: createValidDate(new Date()), 
+      post_updatedAt: createValidDate(new Date()),
     };
 
     const query = `
@@ -90,7 +92,7 @@ export class Post implements IPost {
     const postData = [
       this.post_title,
       this.post_text,
-      this.post_updatedAt = createValidDate(new Date()),
+      (this.post_updatedAt = createValidDate(new Date())),
       this.post_ID,
     ];
 

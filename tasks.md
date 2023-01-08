@@ -1,6 +1,6 @@
 # Progress view
 
-### Main Tasks
+### Main Task
  - [x] Build project files structure
  - [x] Realise server launch and modules in app.ts
  - [x] Insert ready EJS files to 'views' directory
@@ -24,8 +24,8 @@
  - [] Generics
 
 ### ['in-process'] Refactor project
- - [] Implement types into project
- - [] Change other controllers
- - [] if-else errors first (errors higher)
- - [] npm install Prettier, ESLint
- - [] npm @types move to devDependecies
+ - [x] Change other controllers
+ - [x] if-else errors first (errors higher)
+ - [x] npm @types move to devDependecies
+ - [x] npm install Prettier, ESLint
+ - [] implement types into project
