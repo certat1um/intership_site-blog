@@ -1,6 +1,6 @@
 import uniqid from "uniqid";
 import { IPost } from "../interfaces/IPost";
-import { makeQuery } from "../database";
+import { makeQuery } from "../config/database";
 import { createValidDate } from "../helpers/createValidDate";
 
 export class Post implements IPost {
