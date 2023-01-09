@@ -1,4 +1,5 @@
 import mysql, { QueryError } from "mysql2";
+import { RowDataPacket } from "mysql2";
 
 const conn = mysql.createConnection({
   host: "localhost",
@@ -13,8 +14,8 @@ conn.connect((err: QueryError | null): void => {
 
 export const makeQuery = async (query: string, data: string[]) => {
   try {
-    const [rows, fields] = await conn.promise().query(query, data);
-    if (!Object.keys(rows).length) {
+    const [rows] = await conn.promise().query<RowDataPacket[]>(query, data);
+    if (!Array.isArray(rows)) {
       return null;
     }
     return rows[0];

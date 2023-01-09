@@ -19,7 +19,6 @@ const registerUser = async (req: Request, res: Response) => {
     }
 
     const encryptedPassword = await bcrypt.hash(password, 10);
-
     const userData = {
       fullname: `${first_name} ${last_name}`,
       email: email.toLowerCase(),
@@ -27,7 +26,6 @@ const registerUser = async (req: Request, res: Response) => {
     };
 
     const user = await new User(userData);
-
     const token = jwt.sign(
       {
         user_id: user._id,
@@ -48,13 +46,6 @@ const registerUser = async (req: Request, res: Response) => {
   }
 };
 
-const welcomeUser = async (req: Request, res: Response) => {
-  try {
-    res.status(200).send("Welcome!");
-  } catch (err) {
-    handleAPIError(res, err);
-  }
-};
 const loginUser = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
@@ -68,14 +59,26 @@ const loginUser = async (req: Request, res: Response) => {
     if (!(user && (await bcrypt.compare(password, user.password)))) {
       return res.status(400).send("Invalid Credentials");
     }
-    const token = jwt.sign({ user_id: user._id, email }, "secret", {
-      expiresIn: "2h",
-    });
+    const token = jwt.sign(
+      { user_id: user._id, email },
+      "secret",
+      {
+        expiresIn: "2h",
+      }
+    );
 
     user.token = token;
     user.refreshToken();
 
     res.status(400).json(user);
+  } catch (err) {
+    handleAPIError(res, err);
+  }
+};
+
+const welcomeUser = async (req: Request, res: Response) => {
+  try {
+    res.status(200).send("Welcome!");
   } catch (err) {
     handleAPIError(res, err);
   }

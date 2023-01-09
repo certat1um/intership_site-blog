@@ -23,12 +23,12 @@
  - [] Interfaces
  - [] Generics
 
-### ['in-process'] Refactor project
- - [x] Change other controllers
- - [x] if-else errors first (errors higher)
- - [x] npm @types move to devDependecies
- - [x] npm install Prettier, ESLint
+### ['in-process'] Refactor project or ToDo
+ - [x] database.ts
+ - [] replace expiresIn to const
  - [] implement types into project
+ - [] implement JEST tests
+
 
 ### Questions:
  - do not look after <any> yet

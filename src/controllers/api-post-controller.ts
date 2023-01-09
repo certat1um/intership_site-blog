@@ -18,8 +18,8 @@ const getPosts = async (req: Request, res: Response) => {
 
 const getPost = async (req: Request, res: Response) => {
   try {
-    const post_ID: string = req.params.id;
-    const post = await Post.findById(post_ID);
+    const postID: string = req.params.id;
+    const post = await Post.findById(postID);
 
     if (!post) {
       throw new Error("Post has not been found");
@@ -42,8 +42,8 @@ const createPost = async (req: Request, res: Response) => {
 
 const deletePost = async (req: Request, res: Response) => {
   try {
-    const post_ID = { post_ID: req.params.id };
-    const result = await new Post(post_ID).deleteById();
+    const postID = { _id: req.params.id };
+    const result = await new Post(postID).deleteById();
 
     res.status(200).json(result);
   } catch (err) {
@@ -53,9 +53,9 @@ const deletePost = async (req: Request, res: Response) => {
 
 const updatePost = async (req: Request, res: Response) => {
   try {
-    const post_ID = { post_ID: req.params.id };
+    const postID = { _id: req.params.id };
     const postData: IPost = {
-      ...post_ID,
+      _id: postID,
       ...req.body,
     };
     const result = await new Post(postData).updateById();

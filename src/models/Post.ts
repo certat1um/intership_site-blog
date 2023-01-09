@@ -4,39 +4,39 @@ import { makeQuery } from "../config/database";
 import { createValidDate } from "../helpers/createValidDate";
 
 export class Post implements IPost {
-  public post_ID: string;
-  public post_title?: string;
-  public post_text?: string;
-  public author_login?: string;
-  public post_createdAt?: string;
-  public post_updatedAt?: string;
+  public _id: string;
+  public title?: string;
+  public text?: string;
+  public author_id?: string;
+  public createdAt?: string;
+  public updatedAt?: string;
 
   constructor(postData: IPost) {
     const {
-      post_ID,
-      post_title,
-      post_text,
-      author_login,
-      post_createdAt,
-      post_updatedAt,
+      _id,
+      title,
+      text,
+      author_id,
+      createdAt,
+      updatedAt,
     } = postData;
 
-    this.post_ID = post_ID;
-    this.post_title = post_title;
-    this.post_text = post_text;
-    this.author_login = author_login;
-    this.post_createdAt = post_createdAt;
-    this.post_updatedAt = post_updatedAt;
+    this._id = _id;
+    this.title = title;
+    this.text = text;
+    this.author_id = author_id;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 
   static async findAll() {
     const query = `
-      SELECT post_ID, post_title, post_text,
-      authors.author_login, author_fullname,
-      post_createdAt, post_updatedAt
-      FROM posts inner JOIN authors
-      ON posts.author_login = authors.author_login
-      ORDER BY post_updatedAt DESC;
+      SELECT posts._id, posts.title, posts.text,
+      users._id, users.fullname,
+      posts.createdAt, posts.updatedAt
+      FROM posts inner JOIN users
+      ON posts.author_id = users._id
+      ORDER BY posts.updatedAt DESC;
     `;
 
     const posts = await makeQuery(query, []);
@@ -49,33 +49,35 @@ export class Post implements IPost {
 
   static async findById(id: string) {
     const query = `
-      SELECT post_ID, post_title, post_text, authors.author_login, author_fullname, post_createdAt, post_updatedAt
-      FROM posts INNER JOIN authors
-      ON posts.post_ID = ?;
+      SELECT posts._id, posts.title, posts.text,
+      users._id, users.fullname, posts.createdAt,
+      posts.updatedAt
+      FROM posts INNER JOIN users
+      ON posts._id = ?;
     `;
 
     const post = await makeQuery(query, [id]);
-
-    // @ts-ignore
-    return post ? post[0] : null;
+    if(Array.isArray(post) && post[0]) {
+      return post[0];
+    }
+    return null;
   }
 
   async create() {
     const postData: IPost = {
-      post_ID: uniqid(),
-      post_title: this.post_title,
-      post_text: this.post_text,
-      author_login: "johnsmith01",
-      post_createdAt: createValidDate(new Date()),
-      post_updatedAt: createValidDate(new Date()),
+      _id: uniqid(),
+      title: this.title,
+      text: this.text,
+      author_id: "johnsmith01",
+      createdAt: createValidDate(new Date()),
+      updatedAt: createValidDate(new Date()),
     };
 
     const query = `
       INSERT INTO posts
-      (post_ID, post_title, post_text,
-      author_login, post_createdAt, post_updatedAt)
-      VALUES
-      (?, ?, ?, ?, ?, ?);
+      (_id, title, text,
+      author_id, createdAt, updatedAt)
+      VALUES (?, ?, ?, ?, ?, ?);
     `;
 
     await makeQuery(query, Object.values(postData));
@@ -85,27 +87,27 @@ export class Post implements IPost {
   async updateById() {
     const query = `
       UPDATE posts
-      SET post_title = ?, post_text = ?, post_updatedAt = ?
-      WHERE post_ID = ?;
+      SET title = ?, text = ?, updatedAt = ?
+      WHERE _id = ?;
     `;
 
-    const postData = [
-      this.post_title,
-      this.post_text,
-      (this.post_updatedAt = createValidDate(new Date())),
-      this.post_ID,
-    ];
+    const postData: IPost = {
+      title: this.title,
+      text: this.text,
+      updatedAt: (this.updatedAt = createValidDate(new Date())),
+      _id: this._id,
+    };
 
-    const result = await makeQuery(query, postData);
+    const result = await makeQuery(query, Object.values(postData));
     return result;
   }
 
   async deleteById() {
     const query = `
       DELETE FROM posts
-      WHERE post_ID = ?;
+      WHERE _id = ?;
     `;
 
-    return makeQuery(query, [this.post_ID]);
+    return makeQuery(query, [this._id]);
   }
 }

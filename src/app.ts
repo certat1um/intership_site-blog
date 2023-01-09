@@ -1,3 +1,4 @@
+import * as dotenv from "dotenv";
 import path from "path";
 import express from "express";
 import methodOverride from "method-override";
@@ -6,10 +7,9 @@ import { router as userAPIRoutes } from "./routes/api-user-routes";
 import { router as postAPIRoutes } from "./routes/api-post-routes";
 import { router as singleRoutes } from "./routes/single-routes";
 import { router as postRoutes } from "./routes/post-routes";
-//import * as dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
-//dotenv.config();
 
 const PORT = 3000;
 

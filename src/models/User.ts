@@ -1,6 +1,6 @@
+import { makeQuery } from "../config/database";
 import { IUser } from "../interfaces/IUser";
 import uniqid from "uniqid";
-import { makeQuery } from "../config/database";
 
 export class User implements IUser {
   public _id?: string;
@@ -30,7 +30,7 @@ export class User implements IUser {
     `;
 
     const user = await makeQuery(query, [email]);
-    return user ? new User(user) : user;
+    return user ? new User(user) : null;
   }
 
   async create() {
@@ -57,6 +57,9 @@ export class User implements IUser {
       WHERE email = ?;
     `;
 
+    if(!this.token) {
+      throw new Error("Token has not been got")
+    }
     const user = await makeQuery(query, [this.token, this.email]);
     return user;
   }
