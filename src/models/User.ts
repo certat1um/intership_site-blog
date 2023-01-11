@@ -30,14 +30,15 @@ export class User implements IUser {
     `;
 
     const user = await makeQuery(query, [email]);
+    //@ts-ignore
     return user ? new User(user) : null;
   }
 
   async create() {
-    const userData = {
-      _id: uniqid(),
-      ...this,
-    };
+    const userData = [
+      uniqid(),
+      ...Object.values(this),
+    ];
 
     const query = `
       INSERT INTO users
@@ -46,7 +47,7 @@ export class User implements IUser {
       (?, ?, ?, ?, ?);
     `;
 
-    const user = await makeQuery(query, Object.values(userData));
+    const user = await makeQuery(query, userData);
     return user;
   }
 

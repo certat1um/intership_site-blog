@@ -25,7 +25,7 @@
 
 ### ['in-process'] Refactor project or ToDo
  - [x] database.ts
- - [] replace expiresIn to const
+ - [x] replace expiresIn to const
  - [] implement types into project
  - [] implement JEST tests
 
