@@ -12,14 +12,7 @@ export class Post implements IPost {
   public updatedAt?: string;
 
   constructor(postData: IPost) {
-    const {
-      _id,
-      title,
-      text,
-      author_id,
-      createdAt,
-      updatedAt,
-    } = postData;
+    const { _id, title, text, author_id, createdAt, updatedAt } = postData;
 
     this._id = _id;
     this.title = title;
@@ -57,7 +50,7 @@ export class Post implements IPost {
     `;
 
     const post = await makeQuery(query, [id]);
-    if(Array.isArray(post) && post[0]) {
+    if (Array.isArray(post) && post[0]) {
       return post[0];
     }
     return null;

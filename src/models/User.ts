@@ -35,10 +35,7 @@ export class User implements IUser {
   }
 
   async create() {
-    const userData = [
-      uniqid(),
-      ...Object.values(this),
-    ];
+    const userData = [uniqid(), ...Object.values(this)];
 
     const query = `
       INSERT INTO users
@@ -58,8 +55,8 @@ export class User implements IUser {
       WHERE email = ?;
     `;
 
-    if(!this.token) {
-      throw new Error("Token has not been got")
+    if (!this.token) {
+      throw new Error("Token has not been got");
     }
     const user = await makeQuery(query, [this.token, this.email]);
     return user;

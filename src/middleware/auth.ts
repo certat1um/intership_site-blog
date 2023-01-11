@@ -2,7 +2,11 @@ import { Request, Response, NextFunction } from "express";
 import { DynamicAnyObj } from "../interfaces/DynamicAnyObj";
 import jwt from "jsonwebtoken";
 
-const verifyToken = (req: Request & DynamicAnyObj, res: Response, next: NextFunction) => {
+const verifyToken = (
+  req: Request & DynamicAnyObj,
+  res: Response,
+  next: NextFunction
+) => {
   const token =
     req.body.token || req.query.token || req.headers["x-access-token"];
 
