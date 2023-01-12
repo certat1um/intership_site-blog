@@ -1,8 +1,8 @@
 export interface IPost {
-  _id: string;
+  readonly _id: string;
   title?: string;
   text?: string;
-  author_id?: string;
-  createdAt?: string;
+  readonly author_id?: string;
+  readonly createdAt?: string;
   updatedAt?: string;
 }

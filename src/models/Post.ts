@@ -24,11 +24,7 @@ export class Post implements IPost {
 
   static async findAll() {
     const query = `
-      SELECT posts._id, posts.title, posts.text,
-      users._id, users.fullname,
-      posts.createdAt, posts.updatedAt
-      FROM posts inner JOIN users
-      ON posts.author_id = users._id
+      SELECT * FROM posts
       ORDER BY posts.updatedAt DESC;
     `;
 
@@ -42,11 +38,8 @@ export class Post implements IPost {
 
   static async findById(id: string) {
     const query = `
-      SELECT posts._id, posts.title, posts.text,
-      users._id, users.fullname, posts.createdAt,
-      posts.updatedAt
-      FROM posts INNER JOIN users
-      ON posts._id = ?;
+      SELECT * from posts
+      WHERE _id = ?;
     `;
 
     const post = await makeQuery(query, [id]);
@@ -61,7 +54,7 @@ export class Post implements IPost {
       _id: uniqid(),
       title: this.title,
       text: this.text,
-      author_id: "johnsmith01",
+      author_id: "ex25ebt8lcnkpgre",
       createdAt: createValidDate(new Date()),
       updatedAt: createValidDate(new Date()),
     };
@@ -84,14 +77,11 @@ export class Post implements IPost {
       WHERE _id = ?;
     `;
 
-    const postData: IPost = {
-      title: this.title,
-      text: this.text,
-      updatedAt: (this.updatedAt = createValidDate(new Date())),
-      _id: this._id,
-    };
+    this.updatedAt = createValidDate(new Date());
 
-    const result = await makeQuery(query, Object.values(postData));
+    const postData = [this.title, this.text, this.updatedAt, this._id];
+
+    const result = await makeQuery(query, postData);
     return result;
   }
 

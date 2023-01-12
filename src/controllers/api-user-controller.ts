@@ -26,17 +26,15 @@ const registerUser = async (req: Request, res: Response) => {
     };
 
     const user = await new User(userData);
-    const TOKEN_KEY: any = process.env.TOKEN_KEY;
-    const EXPIRES_IN: any = process.env.TOKEXPIRES_INEN_KEY;
 
     const token = jwt.sign(
       {
         user_id: user._id,
         email,
       },
-      TOKEN_KEY,
+      process.env.TOKEN_KEY ?? "",
       {
-        expiresIn: EXPIRES_IN,
+        expiresIn: process.env.EXPIRES_IN ?? "",
       }
     );
 
@@ -63,17 +61,14 @@ const loginUser = async (req: Request, res: Response) => {
       return res.status(400).send("Invalid Credentials");
     }
 
-    const TOKEN_KEY: any = process.env.TOKEN_KEY;
-    const EXPIRES_IN: any = process.env.TOKEXPIRES_INEN_KEY;
-
     const token = jwt.sign(
       {
         user_id: user._id,
         email,
       },
-      TOKEN_KEY,
+      process.env.TOKEN_KEY ?? "",
       {
-        expiresIn: EXPIRES_IN,
+        expiresIn: process.env.EXPIRES_IN ?? "",
       }
     );
 

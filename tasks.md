@@ -12,26 +12,22 @@
  - [x] Realise Handling Error functions
  - [x] Authors authentication via JWT tokens
  - [] + login via Google Passport
+ - [] implement JEST tests
 
 ### Learning TypeScript: 
  - [x] Basic types
  - [x] Functions
- - [~] Objects
- - [~] Classes
- - [] Heritance
- - [] Namespaces & modules
- - [] Interfaces
+ - [х] Objects
+ - [х] Classes
+ - [-] Heritance
+ - [х] Namespaces & modules
+ - [х] Interfaces
  - [] Generics
 
 ### ['in-process'] Refactor project or ToDo
- - [x] database.ts
- - [x] replace expiresIn to const
  - [] implement types into project
- - [] implement JEST tests
 
-
-### Questions:
- - do not look after <any> yet
- - ask about mysql2
- - ask about RowDataPacket and types in general
- - will repair Post and other files
+### ToDo:
+ - (test) Post.ts: (mock findById and other)
+ - (test) api-controllers: (mock results. if ) 
+ - (refactor) change User class constructor

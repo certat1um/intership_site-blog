@@ -8,7 +8,7 @@ const getPosts = async (req: Request, res: Response) => {
     const posts = await Post.findAll();
 
     if (!posts) {
-      throw new Error("No posts have been found");
+      return res.status(204).json("No posts found");
     }
     res.status(200).json(posts);
   } catch (err) {
@@ -17,12 +17,13 @@ const getPosts = async (req: Request, res: Response) => {
 };
 
 const getPost = async (req: Request, res: Response) => {
+  const postID: string = req.params.id;
+
   try {
-    const postID: string = req.params.id;
     const post = await Post.findById(postID);
 
     if (!post) {
-      throw new Error("Post has not been found");
+      res.status(404).send("No post found");
     }
     res.status(200).json(post);
   } catch (err) {
@@ -41,8 +42,9 @@ const createPost = async (req: Request, res: Response) => {
 };
 
 const deletePost = async (req: Request, res: Response) => {
+  const postID = { _id: req.params.id };
+
   try {
-    const postID = { _id: req.params.id };
     const result = await new Post(postID).deleteById();
 
     res.status(200).json(result);
@@ -52,12 +54,14 @@ const deletePost = async (req: Request, res: Response) => {
 };
 
 const updatePost = async (req: Request, res: Response) => {
+  const { title, text } = req.body;
+  const postData: IPost = {
+    _id: req.params.id,
+    title,
+    text,
+  };
+
   try {
-    const postID = { _id: req.params.id };
-    const postData: IPost = {
-      _id: postID,
-      ...req.body,
-    };
     const result = await new Post(postData).updateById();
 
     res.status(200).json(result);

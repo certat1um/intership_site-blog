@@ -1,5 +1,6 @@
 import mysql, { QueryError } from "mysql2";
-import { RowDataPacket } from "mysql2";
+import { IUser } from "../interfaces/IUser";
+import { IPost } from "../interfaces/IPost";
 
 const conn = mysql.createConnection({
   host: "localhost",
@@ -8,18 +9,18 @@ const conn = mysql.createConnection({
 });
 
 conn.connect((err: QueryError | null): void => {
-  if (err) console.log(err);
-  else console.log("Database ===> OK");
+  console.log(err ?? "Database: OK");
 });
 
-export const makeQuery = async (query: string, data: string[]) => {
+export const makeQuery = async (
+  query: string,
+  data: unknown[]
+): Promise<IUser[] | IPost[] | null> => {
   try {
-    const [rows] = await conn.promise().query<RowDataPacket[]>(query, data);
-    if (!Array.isArray(rows)) {
-      return null;
-    }
-    return rows[0];
+    const [rows] = await conn.promise().query<IUser[]>(query, data);
+    return rows;
   } catch (err) {
     console.log(err);
+    return null;
   }
 };

@@ -29,8 +29,8 @@ export class User implements IUser {
     WHERE email = ?;
     `;
 
-    const user = await makeQuery(query, [email]);
-    //@ts-ignore
+    const user = (await makeQuery(query, [email])) as IUser | null;
+
     return user ? new User(user) : null;
   }
 

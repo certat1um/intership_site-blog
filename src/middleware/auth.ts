@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { DynamicAnyObj } from "../interfaces/DynamicAnyObj";
+import { changeableRequest } from "../interfaces/changeableRequest";
 import jwt from "jsonwebtoken";
 
 const verifyToken = (
-  req: Request & DynamicAnyObj,
+  req: Request & changeableRequest,
   res: Response,
   next: NextFunction
 ) => {
