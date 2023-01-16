@@ -25,11 +25,9 @@
  - [x] Generics
 
 ### To Ask:
- - 
 
 ### ['in-process'] Refactor project or ToDo
- - [x] Post, User: refactor to generics
- - [x] api-post-controller: createPost to check req.body
- - [x] destroy constructors
+ - [x] return controller types
+ - [x] User: change parameters to obj
+ - [x] auth.ts: create interface for req
  - [] (test) Post.ts: (mock findById and other)
- - [] (test) api-controllers: (mock results. if )

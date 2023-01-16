@@ -2,12 +2,16 @@ import { Request, Response } from "express";
 import { handleAPIError } from "../helpers/handleAPIError";
 import { Post } from "../models/Post";
 
-const getPosts = async (req: Request, res: Response) => {
+const getPosts = async (
+  req: Request,
+  res: Response
+): Promise<Request | void> => {
   try {
     const posts = await Post.findAll();
 
     if (posts === null) {
-      return res.status(204).json("No posts found");
+      res.status(400).json("No posts found");
+      return;
     }
     res.status(200).json(posts);
   } catch (err) {
@@ -15,14 +19,15 @@ const getPosts = async (req: Request, res: Response) => {
   }
 };
 
-const getPost = async (req: Request, res: Response) => {
-  const postID = req.params.id;
-
+const getPost = async (
+  req: Request,
+  res: Response
+): Promise<Request | void> => {
   try {
-    const post = await Post.findById(postID);
+    const post = await Post.findById(req.params.id);
 
     if (post === null) {
-      res.status(200).send("Post has not been found");
+      res.status(400).send("Post has not been found");
       return;
     }
     res.status(200).json(post);
@@ -31,18 +36,23 @@ const getPost = async (req: Request, res: Response) => {
   }
 };
 
-const createPost = async (req: Request, res: Response) => {
+const createPost = async (
+  req: Request,
+  res: Response
+): Promise<Request | void> => {
   const { title, text } = req.body;
 
   if (title === "" || text === "") {
     res.status(400).send("Title and text inputs shouldn't be empty!");
+    return;
   }
 
   try {
     const result = await new Post().create(title, text);
 
     if (result === null) {
-      res.status(400).send("Got an error while creating the post");
+      res.status(500).send("Got an error while creating the post");
+      return;
     }
     res.status(201).json(result);
   } catch (err) {
@@ -50,12 +60,16 @@ const createPost = async (req: Request, res: Response) => {
   }
 };
 
-const updatePost = async (req: Request, res: Response) => {
+const updatePost = async (
+  req: Request,
+  res: Response
+): Promise<Request | void> => {
   const { title, text } = req.body;
   const _id = req.params.id;
 
   if (title === "" || text === "") {
     res.status(400).send("Title and text inputs shouldn't be empty!");
+    return;
   }
 
   try {
@@ -63,6 +77,7 @@ const updatePost = async (req: Request, res: Response) => {
 
     if (result === null) {
       res.status(400).send("Got an error while updating the post");
+      return;
     }
     res.status(200).json(result);
   } catch (err) {
@@ -70,7 +85,10 @@ const updatePost = async (req: Request, res: Response) => {
   }
 };
 
-const deletePost = async (req: Request, res: Response) => {
+const deletePost = async (
+  req: Request,
+  res: Response
+): Promise<Request | void> => {
   try {
     const result = await new Post().deleteById(req.params.id);
 

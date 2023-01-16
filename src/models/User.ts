@@ -1,29 +1,36 @@
-import { makeQuery } from "../config/database";
-import { IUser } from "../interfaces/IUser";
-import uniqid from "uniqid";
-import { createToken } from "../helpers/createToken";
 import bcrypt from "bcryptjs";
+import uniqid from "uniqid";
+import { IUser } from "../interfaces/IUser";
+import { makeQuery } from "../config/database";
+import { createToken } from "../helpers/createToken";
 
 export class User {
-  static async findByEmail(email: string) {
+  static async findByEmail(email: string): Promise<IUser | null> {
     const query = `
     SELECT * from users
     WHERE email = ?;
     `;
 
     const user = await makeQuery<IUser>(query, [email]);
-    return user === null ? null : user[0];
+    if (user === null || !user.length) {
+      return null;
+    }
+    return user[0];
   }
 
-  async create([fullname, email, password]: string[]) {
+  async create(data: {
+    fullname: string;
+    email: string;
+    password: string;
+  }): Promise<IUser[] | null> {
     const id = uniqid();
-    const encryptedPassword = await bcrypt.hash(password, 10);
-    const token = createToken(id, email);
+    const encryptedPassword = await bcrypt.hash(data.password, 10);
+    const token = createToken(id, data.email);
 
     const userData = [
       id,
-      fullname,
-      email.toLowerCase(),
+      data.fullname,
+      data.email.toLowerCase(),
       encryptedPassword,
       token,
     ];
@@ -35,11 +42,13 @@ export class User {
       (?, ?, ?, ?, ?);
     `;
 
-    const user = await makeQuery<IUser>(query, userData);
-    return user === null ? null : user;
+    return makeQuery<IUser>(query, userData);
   }
 
-  static async refreshUserToken(id: string, email: string) {
+  static async refreshUserToken(
+    id: string,
+    email: string
+  ): Promise<IUser[] | null> {
     const token = createToken(id, email);
 
     const query = `
@@ -48,7 +57,6 @@ export class User {
       WHERE email = ?;
     `;
 
-    const result = await makeQuery<IUser>(query, [token, email]);
-    return result === null ? null : result;
+    return makeQuery<IUser>(query, [token, email]);
   }
 }

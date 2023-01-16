@@ -1,8 +1,9 @@
-import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { Response, NextFunction } from "express";
+import { changeableRequest } from "../interfaces/changeableRequest";
 
 const verifyToken = (
-  req: Request & Record<string, unknown>,
+  req: changeableRequest,
   res: Response,
   next: NextFunction
 ) => {

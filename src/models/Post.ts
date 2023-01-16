@@ -4,27 +4,34 @@ import { makeQuery } from "../config/database";
 import { createValidDate } from "../helpers/createValidDate";
 
 export class Post {
-  static async findAll() {
+  static async findAll(): Promise<IPost[] | null> {
     const query = `
       SELECT * FROM posts
       ORDER BY posts.updatedAt DESC;
     `;
 
     const posts = await makeQuery<IPost>(query);
-    return posts === null ? null : posts;
+    if (posts === null || !posts.length) {
+      return null;
+    }
+    return posts;
   }
 
-  static async findById(id: string) {
+  static async findById(id: string): Promise<IPost | null> {
     const query = `
       SELECT * from posts
       WHERE _id = ?;
     `;
 
     const post = await makeQuery<IPost>(query, [id]);
-    return post === null || !post.length ? null : post[0];
+
+    if (post === null || !post.length) {
+      return null;
+    }
+    return post[0];
   }
 
-  async create(title: string, text: string) {
+  async create(title: string, text: string): Promise<IPost[] | null> {
     const postData = [
       uniqid(),
       title,
@@ -41,11 +48,14 @@ export class Post {
       VALUES (?, ?, ?, ?, ?, ?);
     `;
 
-    const result = await makeQuery<IPost>(query, postData);
-    return result;
+    return makeQuery<IPost>(query, postData);
   }
 
-  async updateById(id: string, title: string, text: string) {
+  async updateById(
+    id: string,
+    title: string,
+    text: string
+  ): Promise<IPost[] | null> {
     const query = `
       UPDATE posts
       SET title = ?, text = ?, updatedAt = ?
@@ -54,11 +64,10 @@ export class Post {
 
     const postData = [title, text, createValidDate(new Date()), id];
 
-    const result = await makeQuery<IPost>(query, postData);
-    return result;
+    return makeQuery<IPost>(query, postData);
   }
 
-  async deleteById(id: string) {
+  async deleteById(id: string): Promise<IPost[] | null> {
     const query = `
       DELETE FROM posts
       WHERE _id = ?;
