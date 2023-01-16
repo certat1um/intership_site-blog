@@ -2,7 +2,6 @@ import { handleAPIError } from "../helpers/handleAPIError";
 import { Request, Response } from "express";
 import { User } from "../models/User";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 
 const registerUser = async (req: Request, res: Response) => {
   try {
@@ -14,32 +13,12 @@ const registerUser = async (req: Request, res: Response) => {
 
     const oldUser = await User.findByEmail(email);
 
-    if (oldUser) {
+    if (oldUser === null) {
       return res.status(409).send("User already exists. Please login");
     }
 
-    const encryptedPassword = await bcrypt.hash(password, 10);
-    const userData = {
-      fullname: `${first_name} ${last_name}`,
-      email: email.toLowerCase(),
-      password: encryptedPassword,
-    };
-
-    const user = await new User(userData);
-
-    const token = jwt.sign(
-      {
-        user_id: user._id,
-        email,
-      },
-      process.env.TOKEN_KEY ?? "",
-      {
-        expiresIn: process.env.EXPIRES_IN ?? "",
-      }
-    );
-
-    user.token = token;
-    user.create();
+    const fullname = `${first_name} ${last_name}`;
+    const user = await new User().create([fullname, email, password]);
 
     res.status(201).json(user);
   } catch (err) {
@@ -57,25 +36,18 @@ const loginUser = async (req: Request, res: Response) => {
 
     const user = await User.findByEmail(email);
 
-    if (!(user && (await bcrypt.compare(password, user.password)))) {
+    if (
+      !(
+        user &&
+        ((await bcrypt.compare(password, user.password)) || user === null)
+      )
+    ) {
       return res.status(400).send("Invalid Credentials");
     }
 
-    const token = jwt.sign(
-      {
-        user_id: user._id,
-        email,
-      },
-      process.env.TOKEN_KEY ?? "",
-      {
-        expiresIn: process.env.EXPIRES_IN ?? "",
-      }
-    );
+    const result = await User.refreshUserToken(user._id, user.email);
 
-    user.token = token;
-    user.refreshToken();
-
-    res.status(400).json(user);
+    res.status(200).json(result);
   } catch (err) {
     handleAPIError(res, err);
   }

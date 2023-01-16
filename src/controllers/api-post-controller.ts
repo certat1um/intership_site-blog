@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
 import { handleAPIError } from "../helpers/handleAPIError";
-import { IPost } from "../interfaces/IPost";
 import { Post } from "../models/Post";
 
 const getPosts = async (req: Request, res: Response) => {
   try {
     const posts = await Post.findAll();
 
-    if (!posts) {
+    if (posts === null) {
       return res.status(204).json("No posts found");
     }
     res.status(200).json(posts);
@@ -17,13 +16,14 @@ const getPosts = async (req: Request, res: Response) => {
 };
 
 const getPost = async (req: Request, res: Response) => {
-  const postID: string = req.params.id;
+  const postID = req.params.id;
 
   try {
     const post = await Post.findById(postID);
 
-    if (!post) {
-      res.status(404).send("No post found");
+    if (post === null) {
+      res.status(200).send("Post has not been found");
+      return;
     }
     res.status(200).json(post);
   } catch (err) {
@@ -32,22 +32,19 @@ const getPost = async (req: Request, res: Response) => {
 };
 
 const createPost = async (req: Request, res: Response) => {
-  try {
-    const result = await new Post(req.body).create();
+  const { title, text } = req.body;
 
-    res.status(201).json(result);
-  } catch (err) {
-    handleAPIError(res, err);
+  if (title === "" || text === "") {
+    res.status(400).send("Title and text inputs shouldn't be empty!");
   }
-};
-
-const deletePost = async (req: Request, res: Response) => {
-  const postID = { _id: req.params.id };
 
   try {
-    const result = await new Post(postID).deleteById();
+    const result = await new Post().create(title, text);
 
-    res.status(200).json(result);
+    if (result === null) {
+      res.status(400).send("Got an error while creating the post");
+    }
+    res.status(201).json(result);
   } catch (err) {
     handleAPIError(res, err);
   }
@@ -55,15 +52,31 @@ const deletePost = async (req: Request, res: Response) => {
 
 const updatePost = async (req: Request, res: Response) => {
   const { title, text } = req.body;
-  const postData: IPost = {
-    _id: req.params.id,
-    title,
-    text,
-  };
+  const _id = req.params.id;
+
+  if (title === "" || text === "") {
+    res.status(400).send("Title and text inputs shouldn't be empty!");
+  }
 
   try {
-    const result = await new Post(postData).updateById();
+    const result = await new Post().updateById(_id, title, text);
 
+    if (result === null) {
+      res.status(400).send("Got an error while updating the post");
+    }
+    res.status(200).json(result);
+  } catch (err) {
+    handleAPIError(res, err);
+  }
+};
+
+const deletePost = async (req: Request, res: Response) => {
+  try {
+    const result = await new Post().deleteById(req.params.id);
+
+    if (result === null) {
+      res.status(400).send("Got an error while deleting the post");
+    }
     res.status(200).json(result);
   } catch (err) {
     handleAPIError(res, err);

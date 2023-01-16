@@ -11,23 +11,25 @@
  - [x] Make test requests
  - [x] Realise Handling Error functions
  - [x] Authors authentication via JWT tokens
- - [] + login via Google Passport
  - [] implement JEST tests
+ - [] + login via Google Passport
 
 ### Learning TypeScript: 
  - [x] Basic types
  - [x] Functions
  - [х] Objects
  - [х] Classes
- - [-] Heritance
+ - [x] Heritance
  - [х] Namespaces & modules
  - [х] Interfaces
- - [] Generics
+ - [x] Generics
+
+### To Ask:
+ - 
 
 ### ['in-process'] Refactor project or ToDo
- - [] implement types into project
-
-### ToDo:
- - (test) Post.ts: (mock findById and other)
- - (test) api-controllers: (mock results. if ) 
- - (refactor) change User class constructor
+ - [x] Post, User: refactor to generics
+ - [x] api-post-controller: createPost to check req.body
+ - [x] destroy constructors
+ - [] (test) Post.ts: (mock findById and other)
+ - [] (test) api-controllers: (mock results. if )

@@ -1,26 +1,29 @@
-import mysql, { QueryError } from "mysql2";
-import { IUser } from "../interfaces/IUser";
-import { IPost } from "../interfaces/IPost";
+import mysql, { Connection, QueryError, RowDataPacket } from "mysql2";
 
-const conn = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  database: "intership_site_blog",
-});
+async function connect(): Promise<Connection> {
+  const conn = await mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    database: process.env.DB_NAME,
+  });
 
-conn.connect((err: QueryError | null): void => {
-  console.log(err ?? "Database: OK");
-});
+  conn.connect((err: QueryError | null): void => {
+    console.log(err ?? "DB Request: success connect");
+  });
 
-export const makeQuery = async (
+  return conn;
+}
+
+export async function makeQuery<T extends RowDataPacket>(
   query: string,
-  data: unknown[]
-): Promise<IUser[] | IPost[] | null> => {
+  data?: unknown[]
+): Promise<T[] | null> {
   try {
-    const [rows] = await conn.promise().query<IUser[]>(query, data);
+    const conn = await connect();
+    const [rows] = await conn.promise().query<T[]>(query, data);
     return rows;
   } catch (err) {
     console.log(err);
     return null;
   }
-};
+}
