@@ -1,7 +1,6 @@
 import { makeQuery } from "../config/database";
 import { Post } from "./Post";
 import { mocked } from "jest-mock";
-import { IPost } from "../interfaces/IPost";
 import { RowDataPacket } from "mysql2";
 
 const mockedFn = mocked(makeQuery);
@@ -51,61 +50,67 @@ describe("Testing Post class methods", () => {
   });
 
   it("create(): returns correct response object", async () => {
-    const expectedData = {
-      fieldCount: 0,
-      affectedRows: 1,
-      insertId: 0,
-      info: "",
-      serverStatus: 2,
-      warningStatus: 0,
-    };
+    const expectedData = [
+      {
+        fieldCount: 0,
+        affectedRows: 1,
+        insertId: 0,
+        info: "",
+        serverStatus: 2,
+        warningStatus: 0,
+      }
+    ];
     mockedFn.mockImplementation(async () => {
-      return [expectedData] as RowDataPacket[];
+      return expectedData as RowDataPacket[];
     });
 
-    const post = (await new Post().create(title, text)) as IPost[];
+    const response = (await new Post().create(title, text));
 
-    expect(post[0]).toEqual(expectedData);
+    expect(response).toEqual(expectedData);
   });
 
   it("updateById(): returns correct response object", async () => {
-    const expectedData = {
-      fieldCount: 0,
-      affectedRows: 1,
-      insertId: 0,
-      info: "Rows matched: 1  Changed: 1  Warnings: 0",
-      serverStatus: 2,
-      warningStatus: 0,
-      changedRows: 1,
-    };
+    const expectedData = [
+      {
+        fieldCount: 0,
+        affectedRows: 1,
+        insertId: 0,
+        info: "Rows matched: 1  Changed: 1  Warnings: 0",
+        serverStatus: 2,
+        warningStatus: 0,
+        changedRows: 1,
+      }
+    ];
     mockedFn.mockImplementation(async () => {
-      return [expectedData] as RowDataPacket[];
+      return expectedData as RowDataPacket[];
     });
 
     const response = (await new Post().updateById(
       id,
       title,
       text
-    )) as RowDataPacket[];
+    ));
 
-    expect(response[0]).toEqual(expectedData);
+    expect(response).toEqual(expectedData);
   });
 
   it("deleteById(): returns correct response object", async () => {
-    const expectedData = {
-      fieldCount: 0,
-      affectedRows: 1,
-      insertId: 0,
-      info: "",
-      serverStatus: 2,
-      warningStatus: 0,
-    };
+    const expectedData = [
+      {
+        fieldCount: 0,
+        affectedRows: 1,
+        insertId: 0,
+        info: "",
+        serverStatus: 2,
+        warningStatus: 0,
+      }
+    ];
     mockedFn.mockImplementation(async () => {
-      return [expectedData] as RowDataPacket[];
+      return expectedData as RowDataPacket[];
     });
 
-    const post = (await new Post().deleteById(id)) as RowDataPacket[];
+    const response = (await new Post().deleteById(id));
 
-    expect(post[0]).toEqual(expectedData);
+    expect(response).toEqual(expectedData);
   });
 });

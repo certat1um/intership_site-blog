@@ -30,16 +30,18 @@ describe("Testing User class methods", () => {
     const fullname = "Full Name";
     const email = "example@example.com";
     const password = "encrypted.password";
-    const expectedResponse = {
-      fieldCount: 0,
-      affectedRows: 1,
-      insertId: 0,
-      info: "",
-      serverStatus: 2,
-      warningStatus: 0,
-    };
+    const expectedResponse = [
+      {
+        fieldCount: 0,
+        affectedRows: 1,
+        insertId: 0,
+        info: "",
+        serverStatus: 2,
+        warningStatus: 0,
+      }
+    ];
     mockedMakeQuery.mockImplementation(async () => {
-      return [expectedResponse] as RowDataPacket[];
+      return expectedResponse as RowDataPacket[];
     });
 
     const userData = {
@@ -48,8 +50,8 @@ describe("Testing User class methods", () => {
       password,
     };
 
-    const response = (await new User().create(userData)) as RowDataPacket[];
+    const response = (await new User().create(userData));
 
-    expect(response[0]).toEqual(expectedResponse);
+    expect(response).toEqual(expectedResponse);
   });
 });
