@@ -2,6 +2,7 @@ import uniqid from "uniqid";
 import { IPost } from "../interfaces/IPost";
 import { makeQuery } from "../config/database";
 import { createValidDate } from "../helpers/createValidDate";
+import { RowDataPacket } from "mysql2";
 
 export class Post {
   static async findAll(): Promise<IPost[] | null> {
@@ -10,10 +11,12 @@ export class Post {
       ORDER BY posts.updatedAt DESC;
     `;
 
-    const posts = await makeQuery<IPost>(query);
-    if (posts === null || !posts.length) {
+    const result = await makeQuery(query);
+
+    if (result === null) {
       return null;
     }
+    const posts = [...result] as IPost[];
     return posts;
   }
 
@@ -23,15 +26,16 @@ export class Post {
       WHERE _id = ?;
     `;
 
-    const post = await makeQuery<IPost>(query, [id]);
+    const result = await makeQuery(query, [id]);
 
-    if (post === null || !post.length) {
+    if (result === null || !result.length) {
       return null;
     }
+    const post = [...result] as IPost[];
     return post[0];
   }
 
-  async create(title: string, text: string): Promise<IPost[] | null> {
+  async create(title: string, text: string): Promise<RowDataPacket[] | null> {
     const postData = [
       uniqid(),
       title,
@@ -48,14 +52,14 @@ export class Post {
       VALUES (?, ?, ?, ?, ?, ?);
     `;
 
-    return makeQuery<IPost>(query, postData);
+    return makeQuery(query, postData);
   }
 
   async updateById(
     id: string,
     title: string,
     text: string
-  ): Promise<IPost[] | null> {
+  ): Promise<RowDataPacket[] | null> {
     const query = `
       UPDATE posts
       SET title = ?, text = ?, updatedAt = ?
@@ -64,10 +68,10 @@ export class Post {
 
     const postData = [title, text, createValidDate(new Date()), id];
 
-    return makeQuery<IPost>(query, postData);
+    return makeQuery(query, postData);
   }
 
-  async deleteById(id: string): Promise<IPost[] | null> {
+  async deleteById(id: string): Promise<RowDataPacket[] | null> {
     const query = `
       DELETE FROM posts
       WHERE _id = ?;

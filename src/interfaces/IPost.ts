@@ -1,6 +1,4 @@
-import { RowDataPacket } from "mysql2";
-
-export interface IPost extends RowDataPacket {
+export interface IPost {
   readonly _id?: string;
   title?: string;
   text?: string;

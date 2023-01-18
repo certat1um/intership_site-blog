@@ -11,7 +11,7 @@
  - [x] Make test requests
  - [x] Realise Handling Error functions
  - [x] Authors authentication via JWT tokens
- - [] implement JEST tests
+ - [x] implement JEST tests
  - [] + login via Google Passport
 
 ### Learning TypeScript: 
@@ -25,9 +25,7 @@
  - [x] Generics
 
 ### To Ask:
+ - 
 
-### ['in-process'] Refactor project or ToDo
- - [x] return controller types
- - [x] User: change parameters to obj
- - [x] auth.ts: create interface for req
- - [] (test) Post.ts: (mock findById and other)
+### ['in-process'] Refactor project
+ - [x] (test) integrate tests into class methods

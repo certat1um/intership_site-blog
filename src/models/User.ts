@@ -3,6 +3,7 @@ import uniqid from "uniqid";
 import { IUser } from "../interfaces/IUser";
 import { makeQuery } from "../config/database";
 import { createToken } from "../helpers/createToken";
+import { RowDataPacket } from "mysql2";
 
 export class User {
   static async findByEmail(email: string): Promise<IUser | null> {
@@ -11,10 +12,11 @@ export class User {
     WHERE email = ?;
     `;
 
-    const user = await makeQuery<IUser>(query, [email]);
-    if (user === null || !user.length) {
+    const response = await makeQuery(query, [email]);
+    if (response === null || !response.length) {
       return null;
     }
+    const user = [...response] as IUser[];
     return user[0];
   }
 
@@ -22,7 +24,7 @@ export class User {
     fullname: string;
     email: string;
     password: string;
-  }): Promise<IUser[] | null> {
+  }): Promise<RowDataPacket[] | null> {
     const id = uniqid();
     const encryptedPassword = await bcrypt.hash(data.password, 10);
     const token = createToken(id, data.email);
@@ -42,13 +44,13 @@ export class User {
       (?, ?, ?, ?, ?);
     `;
 
-    return makeQuery<IUser>(query, userData);
+    return makeQuery(query, userData);
   }
 
   static async refreshUserToken(
     id: string,
     email: string
-  ): Promise<IUser[] | null> {
+  ): Promise<RowDataPacket[] | null> {
     const token = createToken(id, email);
 
     const query = `
@@ -57,6 +59,6 @@ export class User {
       WHERE email = ?;
     `;
 
-    return makeQuery<IUser>(query, [token, email]);
+    return makeQuery(query, [token, email]);
   }
 }

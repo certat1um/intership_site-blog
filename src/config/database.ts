@@ -1,4 +1,5 @@
 import mysql, { Connection, QueryError, RowDataPacket } from "mysql2";
+import { isArray } from "util";
 
 async function connect(): Promise<Connection> {
   const conn = await mysql.createConnection({
@@ -8,19 +9,25 @@ async function connect(): Promise<Connection> {
   });
 
   conn.connect((err: QueryError | null): void => {
-    console.log(err ?? "DB Request: success connect");
+    if (err) {
+      console.log(err);
+    }
+    console.log("DB Request: success connect");
   });
 
-  return conn;
+  return await conn;
 }
 
-export async function makeQuery<T extends RowDataPacket>(
+export async function makeQuery(
   query: string,
   data?: unknown[]
-): Promise<T[] | null> {
+): Promise<RowDataPacket[] | null> {
   try {
     const conn = await connect();
-    const [rows] = await conn.promise().query<T[]>(query, data);
+    const [rows] = await conn.promise().execute<RowDataPacket[]>(query, data);
+    if (isArray(rows) && !rows.length) {
+      return null;
+    }
     return rows;
   } catch (err) {
     console.log(err);
